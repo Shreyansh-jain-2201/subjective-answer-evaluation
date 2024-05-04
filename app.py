@@ -10,9 +10,8 @@ def main():
     )
     if st.button("Login"):
         if page == "Evaluator":
-            os.system('python -m streamlit run evaluator.py')
+            st.page_link("pages/evaluator.py", label="Evaluator", icon="👩‍🏫")
         else:
-            os.system('python -m streamlit run student.py')
-
+            st.page_link("pages/student.py", label="Student", icon="👩‍🎓")
 if __name__ == "__main__":
     main()

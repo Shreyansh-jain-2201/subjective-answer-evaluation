@@ -1,0 +1,70 @@
+{
+  "subjects": [
+    {
+      "Subject_name": "Introduction to Programming",
+      "Subject_code": "CSE1001",
+      "Number_of_questions": 3,
+      "questions": [
+        {
+          "question": "Explain the difference between procedural programming and object-oriented programming (OOP). Provide examples of each.",
+          "answer": "Procedural programming is a programming paradigm where the program is structured around procedures or functions that perform operations on data. It focuses on procedures and the sequence of steps to be executed. Object-oriented programming (OOP) is a programming paradigm based on the concept of \"objects\", which can contain data in the form of attributes and code in the form of methods. OOP emphasizes data encapsulation, inheritance, and polymorphism. Example of procedural programming: C programming language. Example of object-oriented programming: Java, Python.",
+          "marks": 10
+        },
+        {
+          "question": "What is the difference between a compiler and an interpreter? How do they process code differently?",
+          "answer": "A compiler translates the entire source code into machine code or intermediate code in a single batch, and then the resulting code can be executed separately. An interpreter translates the source code line by line into machine code or intermediate code and executes it directly. Compiler: C, C++, Java (to bytecode). Interpreter: Python, JavaScript.",
+          "marks": 5
+        },
+        {
+          "question": "Describe the concept of inheritance in object-oriented programming. How does it facilitate code reusability?",
+          "answer": "Inheritance is a mechanism in OOP where a new class (subclass) is created by inheriting properties and behaviors from an existing class (superclass). Subclass inherits attributes and methods from its superclass, allowing code reuse without rewriting the same code. Example: Class Vehicle might have attributes like color and methods like start_engine(). Class Car can inherit from Vehicle and gain access to its attributes and methods.",
+          "marks": 5
+        }
+      ]
+    },
+    {
+      "Subject_name": "Data Structures",
+      "Subject_code": "CSE2001",
+      "Number_of_questions": 3,
+      "questions": [
+        {
+          "question": "Explain the concept of a linked list. What are the advantages and disadvantages of using linked lists compared to arrays?",
+          "answer": "A linked list is a linear data structure where elements are stored in nodes. Each node contains a data field and a reference (link) to the next node in the sequence. Advantages of linked lists include dynamic size, efficient insertion and deletion operations, and ability to store elements contiguously in memory. Disadvantages include extra memory overhead due to storing references and slower access time for random elements compared to arrays.",
+          "marks": 10
+        },
+        {
+          "question": "What is a stack? Explain how stacks are used in programming with an example.",
+          "answer": "A stack is a linear data structure that follows the Last In, First Out (LIFO) principle, where elements are inserted and removed from the same end, called the top of the stack. Stacks are used in programming for tasks such as expression evaluation, function call management, and backtracking algorithms. Example: In function call management, a stack is used to keep track of the calling sequence and local variables of nested function calls.",
+          "marks": 5
+        },
+        {
+          "question": "Describe the concept of recursion. Provide an example of a recursive function and explain how it works.",
+          "answer": "Recursion is a programming technique where a function calls itself directly or indirectly to solve a problem. In a recursive function, the problem is divided into smaller subproblems, and the function calls itself with these subproblems until a base case is reached. Example: Factorial function in mathematics. factorial(n) = n * factorial(n-1), with base case factorial(0) = 1.",
+          "marks": 5
+        }
+      ]
+    },
+    {
+      "Subject_name": "Database Management Systems",
+      "Subject_code": "CSE3001",
+      "Number_of_questions": 3,
+      "questions": [
+        {
+          "question": "Explain the concept of normalization in the context of database design. Why is normalization important?",
+          "answer": "Normalization is the process of organizing data in a database to minimize redundancy and dependency. It involves breaking down a table into smaller tables and defining relationships between them to reduce data duplication and ensure data integrity. Normalization helps in efficient data storage, reduces update anomalies, and improves database performance.",
+          "marks": 10
+        },
+        {
+          "question": "What is a primary key in a relational database? How is it different from a foreign key?",
+          "answer": "A primary key is a unique identifier for each record in a table. It ensures that each record in the table can be uniquely identified and retrieved. A foreign key, on the other hand, is a field (or a set of fields) in a table that refers to the primary key of another table. It establishes a relationship between the two tables.",
+          "marks": 5
+        },
+        {
+          "question": "Explain the ACID properties in the context of database transactions.",
+          "answer": "ACID stands for Atomicity, Consistency, Isolation, and Durability. Atomicity ensures that either all operations in a transaction are completed successfully, or none of them are. Consistency ensures that the database remains in a consistent state before and after the transaction. Isolation ensures that concurrent transactions do not interfere with each other. Durability ensures that once a transaction is committed, its effects are permanent and survive system failures.",
+          "marks": 5
+        }
+      ]
+    }
+  ]
+}

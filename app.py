@@ -10,8 +10,8 @@ def main():
     )
     if st.button("Login"):
         if page == "Evaluator":
-            st.page_link("pages/evaluator.py", label="Evaluator", icon="👩‍🏫")
+            st.page_link("pages/👩‍🏫Evaluator.py", label="Evaluator", icon="👩‍🏫")
         else:
-            st.page_link("pages/student.py", label="Student", icon="👩‍🎓")
+            st.page_link("pages/👩‍🎓Student.py", label="Student", icon="👩‍🎓")
 if __name__ == "__main__":
     main()

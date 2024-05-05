@@ -73,6 +73,7 @@ OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 APP_PASSWORD = st.secrets["APP_PASSWORD"]
 SENDER_MAIL_ID = st.secrets["SENDER_MAIL_ID"]
 
+
 safety_settings = [
     {
         "category": "HARM_CATEGORY_DANGEROUS",
@@ -96,7 +97,23 @@ safety_settings = [
     },
 ]
 
-
+def smart_tutor(question, previous_lectures, previous_questions):
+    try:
+        client = OpenAI(
+            api_key=os.environ.get("OPENAI_API_KEY"),
+        )
+        prompt = f"""
+As a smart tutor, your task is to provide detailed answers to the student's questions based on the provided lectures and questions. You should be able to answer follow-up questions and provide additional information as needed. You should also be able to answer any questions that the student may have about the lectures or questions provided. The student may ask questions about the topics discussed in the lectures or the questions provided. You should provide detailed responses to the student's questions without revealing that you are an AI assistant. You should also be able to conduct internet searches to gather relevant results if needed.\n"Question: {question}\n\nPrevious Lectures: {previous_lectures}\n\nPrevious Questions: {previous_questions}"""
+        messages = [{"role": "system", "content": prompt}]
+        response = client.chat.completions.create(
+            messages=messages,
+            model="gpt-3.5-turbo-0125",
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+        
 def generate_search_terms(Highlights):
     try:
         client = OpenAI(
@@ -375,10 +392,11 @@ def get_text_from_pdf(pdf_file, APIS):
         return None
 
 
-def get_marks(question, answer_key, student_answer, total_marks):
+def get_marks(question, answer_key, student_answer, total_marks, evaluation_criteria = None):
     try:
         client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-        prompt = f"""Question: {question}\n\nAnswer Key: {answer_key}\n\nStudent Answer: {student_answer}\n\nTotal Marks: {total_marks}\n\nPlease read the question and the answer key provided below to understand the context. Then, evaluate the student's answer based on the answer key and allocate marks accordingly from the total marks given. Provide the marks obtained by the student for the question as an integer value and justify the marks awarded.\n\nThe marks and justification should be formatted as follows:\n\n"marks": <integer_value>,\n"justification": <reason_for_marks>\n"""
+        prompt = f"""Question: {question}\n\nAnswer Key: {answer_key}\n\nStudent Answer: {student_answer}\n\nTotal Marks: {total_marks}\n\nEvaluation Criteria:{evaluation_criteria}Please read the question and the answer key provided below to understand the context. Then, evaluate the student's answer based on the answer key and the following criteria. Allocate marks accordingly from the total marks given.\n\nThe marks and justification should be formatted as follows:\n\n"marks": <integer_value>,\n"justification": <reason_for_marks>\n"""
+
         messages = [{"role": "system", "content": prompt}]
         response = client.chat.completions.create(
             messages=messages,
@@ -594,7 +612,7 @@ def render_dashboard(user_info, json_file_path="evaluator.json"):
 
 def main(json_file_path="students.json", question_paper="question_paper.json"):
     st.header("Welcome to the Student's Dashboard!")
-    page = st.sidebar.selectbox(
+    page = st.sidebar.radio(
         "Go to",
         (
             "Signup/Login",
@@ -603,6 +621,7 @@ def main(json_file_path="students.json", question_paper="question_paper.json"):
             "View Previous Exams",
             "Student Learning Hub",
             "View Previous Lectures",
+            "Smart Tutor",
         ),
         key="page",
     )
@@ -694,6 +713,7 @@ def main(json_file_path="students.json", question_paper="question_paper.json"):
                                 }
                                 for response in question_details:
                                     question = response["question"]
+                                    evaluation_criteria = response["evaluation"]
                                     answer_key = response["answer_key"]
                                     if option == "Upload Answer":
                                         student_answer = ""
@@ -719,7 +739,7 @@ def main(json_file_path="students.json", question_paper="question_paper.json"):
                                         question, answer_key, student_answer
                                     )
                                     result = get_marks(
-                                        question, answer_key, student_answer, total_marks
+                                        question, answer_key, student_answer, total_marks, evaluation_criteria
                                     )
                                     marks_index = result.find('"marks":') + len('"marks":')
                                     marks = int(
@@ -1315,8 +1335,40 @@ def main(json_file_path="students.json", question_paper="question_paper.json"):
 
         else:
             st.warning("Please login/signup to access this page.")
-    else:
-        st.warning("Please login/signup to access this page.")
+   
+    
+    elif page == "Smart Tutor":
+        if session_state.get("logged_in"):
+            with open(json_file_path, "r") as json_file:
+                data = json.load(json_file)
+                for user in data["students"]:
+                    if user["email"] == user_info["email"]:
+                        user_info = user
+                        break
+            if "previous_questions" not in session_state:
+                session_state["previous_questions"] = []
+                
+            previous_lectures = user_info["highlights"]
+            st.title("Smart Tutor")
+            st.write("Welcome to the Smart Tutor page.")
+            st.write("Here you can ask questions and get answers from the Smart Tutor.")
+            if len(session_state["previous_questions"]) > 0:
+                for question in session_state["previous_questions"]:
+                    st.chat_message("You", avatar="👤").write(question["question"])
+                    st.chat_message("Smart Tutor", avatar="🧠").write(question["answer"])
+            
+            if question := st.chat_input("Ask a question", key="question"):
+                session_state["previous_questions"].append({"question": question, "answer": ""})
+                with st.spinner("Thinking..."):
+                    answer = smart_tutor(
+                        question=question,
+                        previous_lectures=previous_lectures,
+                        previous_questions=session_state["previous_questions"],
+                    )
+                    st.chat_message("Smart Tutor", avatar="🧠").write(answer)
+                    session_state["previous_questions"][-1]["answer"] = answer
+                st.rerun()
+            st.warning("Please login/signup to access this page.")
 
 
 if __name__ == "__main__":

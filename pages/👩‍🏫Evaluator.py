@@ -248,7 +248,7 @@ def render_dashboard(user_info, json_file_path="evaluator.json"):
 
 def main(json_file_path="evaluator.json", question_paper="question_paper.json"):
     st.title("Evaluator Dashboard")
-    page = st.sidebar.selectbox(
+    page = st.sidebar.radio(
         "Go to",
         (
             "Signup/Login",
@@ -292,7 +292,8 @@ def main(json_file_path="evaluator.json", question_paper="question_paper.json"):
                     question = st.text_area(f"Question {i+1}:")
                     answer = st.text_area(f"Answer for Question {i+1}:")
                     marks = st.number_input(f"Marks for Question {i+1}:", min_value=0)
-                    questions.append((question, answer, marks))
+                    evaluation_criteria = st.text_area(f"Evaluation Criteria for Question {i+1}:")
+                    questions.append((question, answer, marks, evaluation_criteria))
                 if st.form_submit_button("Create Question Paper"):
                     question_paper = {
                         "Subject_name": Subject_name,
@@ -303,7 +304,7 @@ def main(json_file_path="evaluator.json", question_paper="question_paper.json"):
                     for i in range(Number_of_questions):
                         question, answer, marks = questions[i]
                         question_paper["questions"].append(
-                            {"question": question, "answer": answer, "marks": marks}
+                            {"question": question, "answer": answer, "marks": marks, "evaluation": evaluation_criteria}
                         )
                     with open("question_paper.json", "r+") as json_file:
                         data = json.load(json_file)

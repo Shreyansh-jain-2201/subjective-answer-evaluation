@@ -1369,7 +1369,7 @@ def main(json_file_path="students.json", question_paper="question_paper.json"):
                     st.chat_message("Smart Tutor", avatar="🧠").write(answer)
                     session_state["previous_questions"][-1]["answer"] = answer
                 st.rerun()
-            st.warning("Please login/signup to access this page.")
+        st.warning("Please login/signup to access this page.")
 
 
 if __name__ == "__main__":

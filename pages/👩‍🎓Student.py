@@ -1339,6 +1339,7 @@ def main(json_file_path="students.json", question_paper="question_paper.json"):
     
     elif page == "Smart Tutor":
         if session_state.get("logged_in"):
+            user_info = session_state["user_info"]
             with open(json_file_path, "r") as json_file:
                 data = json.load(json_file)
                 for user in data["students"]:

@@ -248,7 +248,7 @@ def render_dashboard(user_info, json_file_path="evaluator.json"):
 
 def main(json_file_path="evaluator.json", question_paper="question_paper.json"):
     st.title("Evaluator Dashboard")
-    page = st.sidebar.radio(
+    page = st.sidebar.selectbox(
         "Go to",
         (
             "Signup/Login",

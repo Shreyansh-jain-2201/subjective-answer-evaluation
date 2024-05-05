@@ -1359,6 +1359,7 @@ def main(json_file_path="students.json", question_paper="question_paper.json"):
                     st.chat_message("Smart Tutor", avatar="🧠").write(question["answer"])
             
             if question := st.chat_input("Ask a question", key="question"):
+                st.chat_message("You", avatar="👤").write(question)
                 session_state["previous_questions"].append({"question": question, "answer": ""})
                 with st.spinner("Thinking..."):
                     answer = smart_tutor(
